@@ -346,13 +346,17 @@ class SmartLink(ATLink):
     # NB: can't proxy title and description with property due to Archetypes internals  # noqa
     def Title(self):
         internal = self.getInternalLink()
-        if internal and self.check_proxy_status():
-            return internal.Title()
+        current_page_name = self.REQUEST['URL'].split('/')[-1]
+        # the string field macron in edit form calls the accessor method,
+        # instead to take value from the field
+        if self.getTypeInfo().queryMethodID('edit') != current_page_name:
+            if internal and self.check_proxy_status():
+                return internal.Title()
         return self.getField('title').get(self)
 
     def Description(self):
         internal = self.getInternalLink()
-        if internal and self.check_proxy_status:
+        if internal and self.check_proxy_status():
             return internal.Description()
         return self.getField('description').get(self)
     # / End proxy data
