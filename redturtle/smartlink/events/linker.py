@@ -6,6 +6,7 @@ from redturtle.smartlink.interfaces import ISmartLinked
 
 try:
     from plone.app.referenceablebehavior.interfaces import IReferenceable
+    from plone.app.dexterity.interfaces import IReferenceable
     HAS_DX_REFS = True
 except ImportError:
     HAS_DX_REFS = False
@@ -26,15 +27,24 @@ def keepLink(object, event):
     ISmartLinked object has been modified/renamed.
     We need to catalog/update all ISmartLinks referencing it
     """
-    if HAS_DX_REFS:
-        adapter = IReferenceable(object)
-        backRefs = adapter.getBackReferences(relationship='internal_page')
-    else:
-        rcatalog = getToolByName(object, 'reference_catalog')
-        backRefs = rcatalog.getBackReferences(object, relationship='internal_page')
-    for r in backRefs:
+    for r in getBackReferences(object):
         r.setRemoteUrl(r.getRemoteUrl())
         r.reindexObject()
+
+
+def getBackReferences(object):
+    """
+    get back references for DX or AT contents
+    """
+    rcatalog = getToolByName(object, 'reference_catalog')
+    if HAS_DX_REFS:
+        try:
+            adapter = IReferenceable(object)
+            return adapter.getBackReferences(relationship='internal_page')
+        except TypeError:
+            # it's an old AT
+            return rcatalog.getBackReferences(object, relationship='internal_page')
+    return rcatalog.getBackReferences(object, relationship='internal_page')
 
 
 def cleanSmartLinked(object, event):

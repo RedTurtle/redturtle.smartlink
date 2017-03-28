@@ -6,9 +6,11 @@ Changelog
 
 - Fixed issue with new proxy feature.
   Local activation flag was unproperly ignored
-  [keul] 
+  [keul]
 - Fixed an error at creation object
   [ekulos]
+- Fix `keepLink` event. now we handle correctly DX and AT contents
+  [cekk]
 
 1.3.0 (2016-12-23)
 ------------------
