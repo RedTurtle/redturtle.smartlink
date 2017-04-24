@@ -6,7 +6,6 @@ from redturtle.smartlink.interfaces import ISmartLinked
 
 try:
     from plone.app.referenceablebehavior.interfaces import IReferenceable
-    from plone.app.dexterity.interfaces import IReferenceable
     HAS_DX_REFS = True
 except ImportError:
     HAS_DX_REFS = False

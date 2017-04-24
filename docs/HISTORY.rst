@@ -4,7 +4,8 @@ Changelog
 1.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Removed wrong import in `keepLink` event.
+  [cekk]
 
 
 1.3.1 (2017-03-28)
